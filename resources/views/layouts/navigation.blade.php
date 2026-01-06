@@ -1,77 +1,108 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-white border-b border-gray-200 shadow-sm">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-            <div class="flex">
+            <div class="flex items-center">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
+                <div class="shrink-0 flex items-center mr-8">
                     <a href="{{ route('dashboard') }}" class="flex items-center">
                         @if($empresaConfig->logo_url)
                             <img src="{{ $empresaConfig->logo_url }}" 
                                  alt="{{ $empresaConfig->nombre_empresa }}"
-                                 class="h-10 w-auto mr-3">
+                                 class="h-10 w-auto mr-3 transition-transform duration-300 hover:scale-105">
                         @endif
-                        <span class="font-bold text-xl text-gray-800">{{ $empresaConfig->nombre_empresa }}</span>
+                        <span class="font-bold text-xl text-gray-800 hover:text-gray-900 transition-colors">{{ $empresaConfig->nombre_empresa }}</span>
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        <span class="material-symbols-outlined mr-1">dashboard</span> Dashboard
+                <div class="hidden space-x-2 sm:-my-px sm:ms-6 sm:flex">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="nav-item px-4 py-2">
+                        <span class="material-symbols-outlined text-sm">dashboard</span> Dashboard
                     </x-nav-link>
-                    <x-nav-link :href="route('bancos.index')" :active="request()->routeIs('bancos.*')">
-                        <span class="material-symbols-outlined mr-1">account_balance</span> Bancos
+                    <x-nav-link :href="route('bancos.index')" :active="request()->routeIs('bancos.*')" class="nav-item px-4 py-2">
+                        <span class="material-symbols-outlined text-sm">account_balance</span> Bancos
                     </x-nav-link>
-                    <x-nav-link :href="route('tipos-movimiento.index')" :active="request()->routeIs('tipos-movimiento.*')">
-                        <span class="material-symbols-outlined mr-1">category</span> Tipos Movimiento
+                    <x-nav-link :href="route('movimientos.index')" :active="request()->routeIs('movimientos.*')" class="nav-item px-4 py-2">
+                        <span class="material-symbols-outlined text-sm">swap_horiz</span> Movimientos
                     </x-nav-link>
-                    <x-nav-link :href="route('movimientos.index')" :active="request()->routeIs('movimientos.*')">
-                        <span class="material-symbols-outlined mr-1">swap_horiz</span> Movimientos
-                    </x-nav-link>
-                    
-                    <!-- Nueva opción para Configuración de Empresa -->
-                    <x-nav-link :href="route('empresa-config.edit')" :active="request()->routeIs('empresa-config.*')">
-                        <span class="material-symbols-outlined mr-1">business</span> Configuración
+                    <x-nav-link :href="route('cierres-mensuales.index')" :active="request()->routeIs('cierres-mensuales.*')" class="nav-item px-4 py-2">
+                        <span class="material-symbols-outlined text-sm">calendar_month</span> Cierres
                     </x-nav-link>
                 </div>
             </div>
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
+            <!-- Profile Section - Diseño mejorado -->
+            <div class="flex items-center sm:ms-6">
+                <x-dropdown align="right" width="60"> <!-- Ancho aumentado para más opciones -->
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
-
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
+                        <button class="flex items-center text-sm focus:outline-none transition duration-150 ease-in-out">
+                            <div class="hidden md:flex flex-col items-end mr-3">
+                                <span class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</span>
+                                <span class="text-xs text-gray-500 mt-0.5">{{ Auth::user()->email }}</span>
+                            </div>
+                            <div class="bg-gradient-to-br from-blue-500 to-blue-600 border-2 border-white shadow-md rounded-full w-10 h-10 flex items-center justify-center text-white font-bold text-lg">
+                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                             </div>
                         </button>
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            <span class="material-symbols-outlined mr-2 text-sm">person</span> Perfil
-                        </x-dropdown-link>
+                        <div class="px-4 py-3 border-b border-gray-200 bg-gray-50">
+                            <p class="text-sm font-medium text-gray-700">{{ Auth::user()->name }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ Auth::user()->email }}</p>
+                        </div>
                         
-                        <!-- Configuración de Empresa -->
-                        <x-dropdown-link :href="route('empresa-config.edit')">
-                            <span class="material-symbols-outlined mr-2 text-sm">business</span> Configuración Empresa
-                        </x-dropdown-link>
-
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                <span class="material-symbols-outlined mr-2 text-sm">logout</span> Cerrar Sesión
+                        <div class="py-1">
+                            <x-dropdown-link :href="route('profile.edit')" class="dropdown-item flex items-center py-2.5">
+                                <span class="material-symbols-outlined mr-3 text-blue-500">person</span>
+                                <span class="flex-1">Mi Perfil</span>
+                                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">Editar</span>
                             </x-dropdown-link>
-                        </form>
+                            
+                            <div class="border-t border-gray-200 my-1"></div>
+                            
+                            <div class="px-4 py-2 bg-gray-50">
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Configuración</p>
+                            </div>
+                            
+                            <x-dropdown-link :href="route('empresa-config.edit')" class="dropdown-item flex items-center py-2.5">
+                                <span class="material-symbols-outlined mr-3 text-green-500">business</span>
+                                <span class="flex-1">Empresa</span>
+                            </x-dropdown-link>
+                            
+                            <x-dropdown-link :href="route('tipos-movimiento.index')" class="dropdown-item flex items-center py-2.5">
+                                <span class="material-symbols-outlined mr-3 text-purple-500">category</span>
+                                <span class="flex-1">Tipos de Movimiento</span>
+                            </x-dropdown-link>
+                            
+                            <div class="border-t border-gray-200 my-1"></div>
+                            
+                            <div class="px-4 py-2 bg-gray-50">
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Sistema</p>
+                            </div>
+                            
+                            <x-dropdown-link href="#" class="dropdown-item flex items-center py-2.5">
+                                <span class="material-symbols-outlined mr-3 text-yellow-500">settings</span>
+                                <span class="flex-1">Preferencias</span>
+                            </x-dropdown-link>
+                            
+                            <x-dropdown-link href="#" class="dropdown-item flex items-center py-2.5">
+                                <span class="material-symbols-outlined mr-3 text-indigo-500">help</span>
+                                <span class="flex-1">Ayuda</span>
+                            </x-dropdown-link>
+                            
+                            <div class="border-t border-gray-200 my-1"></div>
+                            
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <x-dropdown-link :href="route('logout')" class="dropdown-item flex items-center py-2.5 text-red-600 hover:bg-red-50"
+                                        onclick="event.preventDefault(); this.closest('form').submit();">
+                                    <span class="material-symbols-outlined mr-3 text-red-500">logout</span>
+                                    <span class="flex-1">Cerrar Sesión</span>
+                                </x-dropdown-link>
+                            </form>
+                        </div>
                     </x-slot>
                 </x-dropdown>
             </div>
@@ -90,53 +121,79 @@
 
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                <span class="material-symbols-outlined mr-2">dashboard</span> Dashboard
+        <div class="pt-4 pb-4 space-y-2 bg-gray-50 border-b border-gray-200">
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="responsive-item py-3">
+                <span class="material-symbols-outlined mr-3">dashboard</span> Dashboard
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('bancos.index')" :active="request()->routeIs('bancos.*')">
-                <span class="material-symbols-outlined mr-2">account_balance</span> Bancos
+            <x-responsive-nav-link :href="route('bancos.index')" :active="request()->routeIs('bancos.*')" class="responsive-item py-3">
+                <span class="material-symbols-outlined mr-3">account_balance</span> Bancos
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('tipos-movimiento.index')" :active="request()->routeIs('tipos-movimiento.*')">
-                <span class="material-symbols-outlined mr-2">category</span> Tipos Movimiento
+            <x-responsive-nav-link :href="route('movimientos.index')" :active="request()->routeIs('movimientos.*')" class="responsive-item py-3">
+                <span class="material-symbols-outlined mr-3">swap_horiz</span> Movimientos
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('movimientos.index')" :active="request()->routeIs('movimientos.*')">
-                <span class="material-symbols-outlined mr-2">swap_horiz</span> Movimientos
-            </x-responsive-nav-link>
-            
-            <!-- Configuración de Empresa (responsive) -->
-            <x-responsive-nav-link :href="route('empresa-config.edit')" :active="request()->routeIs('empresa-config.*')">
-                <span class="material-symbols-outlined mr-2">business</span> Configuración
+            <x-responsive-nav-link :href="route('cierres-mensuales.index')" :active="request()->routeIs('cierres-mensuales.*')" class="responsive-item py-3">
+                <span class="material-symbols-outlined mr-3">calendar_month</span> Cierres Mensuales
             </x-responsive-nav-link>
         </div>
 
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+        <!-- Responsive Profile Section -->
+        <div class="pt-5 pb-4 border-t border-gray-200">
+            <div class="px-6 flex items-center">
+                <div class="bg-gradient-to-br from-blue-500 to-blue-600 border-2 border-white shadow-md rounded-full w-12 h-12 flex items-center justify-center text-white font-bold text-lg">
+                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                </div>
+                <div class="ml-4">
+                    <div class="font-semibold text-lg text-gray-800">{{ Auth::user()->name }}</div>
+                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                </div>
             </div>
 
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    <span class="material-symbols-outlined mr-2 text-sm">person</span> Perfil
+            <div class="mt-4 space-y-2 px-4">
+                <x-responsive-nav-link :href="route('profile.edit')" class="responsive-item py-3">
+                    <span class="material-symbols-outlined mr-3 text-blue-500">person</span> Mi Perfil
                 </x-responsive-nav-link>
                 
-                <x-responsive-nav-link :href="route('empresa-config.edit')">
-                    <span class="material-symbols-outlined mr-2 text-sm">business</span> Configuración Empresa
+                <x-responsive-nav-link :href="route('empresa-config.edit')" class="responsive-item py-3">
+                    <span class="material-symbols-outlined mr-3 text-green-500">business</span> Configuración Empresa
                 </x-responsive-nav-link>
-
-                <!-- Authentication -->
+                
+                <x-responsive-nav-link :href="route('tipos-movimiento.index')" class="responsive-item py-3">
+                    <span class="material-symbols-outlined mr-3 text-purple-500">category</span> Tipos de Movimiento
+                </x-responsive-nav-link>
+                
+                <div class="border-t border-gray-200 my-2"></div>
+                
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        <span class="material-symbols-outlined mr-2 text-sm">logout</span> Cerrar Sesión
+                    <x-responsive-nav-link :href="route('logout')" class="responsive-item py-3 text-red-600"
+                            onclick="event.preventDefault(); this.closest('form').submit();">
+                        <span class="material-symbols-outlined mr-3 text-red-500">logout</span> Cerrar Sesión
                     </x-responsive-nav-link>
                 </form>
             </div>
         </div>
     </div>
 </nav>
+
+<style>
+    .nav-item {
+        @apply flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-all duration-200;
+    }
+    .nav-item.active {
+        @apply bg-blue-50 text-blue-700 font-medium;
+    }
+    .dropdown-item {
+        @apply flex items-center px-5 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200;
+    }
+    .responsive-item {
+        @apply flex items-center px-5 py-2.5 text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg transition-colors duration-200;
+    }
+    .responsive-item.active {
+        @apply bg-blue-50 text-blue-700 font-medium;
+    }
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        font-size: 1.15rem;
+        line-height: 1;
+    }
+</style>
