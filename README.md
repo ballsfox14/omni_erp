@@ -1,6 +1,6 @@
 # 📌 ERP
 
-Breve descripción de lo que hace tu sistema (ejemplo: “Sistema de gestión de bancos y movimientos financieros desarrollado en Laravel con PostgreSQL”).
+“Sistema de gestión de bancos y movimientos financieros desarrollado en Laravel con PostgreSQL”.
 
 ---
 
