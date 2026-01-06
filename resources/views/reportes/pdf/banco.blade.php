@@ -286,12 +286,21 @@
     <!-- Header que se repetirá en cada página -->
     <htmlpageheader name="header">
         <div class="header">
-            @if(isset($empresaConfig) && $empresaConfig->logo_url)
-            <div style="text-align: center; margin-bottom: 10px;">
-                <img src="{{ $empresaConfig->logo_url }}" 
-                     alt="{{ $empresaConfig->nombre_empresa }}"
-                     class="company-logo">
-            </div>
+           @php
+                $logoPath = null;
+                    if (!empty($empresaConfig->logo_path)) {
+                        $logoFullPath = storage_path('app/public/' . $empresaConfig->logo_path);
+                        if (file_exists($logoFullPath)) {
+                            $logoPath = $logoFullPath;
+                        }
+                    }
+                @endphp
+                @if($logoPath)
+                <div style="text-align: center; margin-bottom: 10px;">
+                    <img src="file://{{ str_replace('\\', '/', $logoPath) }}" 
+                        alt="{{ $empresaConfig->nombre_empresa }}"
+                        class="company-logo">
+                </div>
             @endif
             
             <div class="company-name">{{ $empresaConfig->nombre_empresa ?? 'OMNIVISION' }}</div>
