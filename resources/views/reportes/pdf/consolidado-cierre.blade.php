@@ -139,14 +139,12 @@
 </head>
 <body>
     @php
-        // Obtener información de empresa
+        $logoPath = null;
         $empresaNombre = $empresaConfig->nombre_empresa ?? 'OmniERP';
-        $logoUrl = null;
-        
-        if(isset($empresaConfig) && !empty($empresaConfig->logo_path)) {
-            $logoPath = storage_path('app/public/' . $empresaConfig->logo_path);
-            if(file_exists($logoPath)) {
-                $logoUrl = $logoPath;
+        if (!empty($empresaConfig->logo_path)) {
+            $logoFullPath = storage_path('app/public/' . $empresaConfig->logo_path);
+            if (file_exists($logoFullPath)) {
+                $logoPath = $logoFullPath;
             }
         }
     @endphp
@@ -154,7 +152,7 @@
     <div class="header">
         @if($logoUrl)
         <div>
-            <img src="file://{{ str_replace('\\', '/', $logoUrl) }}" 
+            <img src="file://{{ str_replace('\\', '/', $logoPath) }}" 
                  alt="{{ $empresaNombre }}"
                  class="company-logo">
         </div>
